@@ -23,164 +23,50 @@ PRODUCTS = [
         },
     ]
 
-# GET Requwst
+# GET Request
 ## Read or Fetch All Data
 @app.get("/product")
 async def all_products():
-    return PRODUCTS
+  return PRODUCTS
 
-## Read or Fetch single data
+## Read or Fetch Single Data
 @app.get("/product/{product_id}")
 async def single_products(product_id:int):
-    for product in PRODUCTS:
-        if product['id'] == product_id:
-            return product
-
+  for product in PRODUCTS:
+    if product["id"] == product_id:
+      return product
+  
 # POST Request
 ## Create or Insert Data
 @app.post("/product")
 async def create_product(new_product: dict):
-    PRODUCTS.append(new_product)
-    return {"status":"created","new_product":new_product}
+  PRODUCTS.append(new_product)
+  return {"status":"created", "new_product":new_product}
 
 # PUT Request
-## Update complete Data
+## Update Complete Data
 @app.put("/product/{product_id}")
 def update_product(product_id: int, new_updated_product: dict):
-    for index,product in enumerate(PRODUCTS):
-        if product["id"] == product_id:
-            PRODUCTS[index] = new_updated_product
-            return {"status":"updated","updated_product":new_updated_product}
-        
-
-# PATCH without enumerate
-## Update partial data
-@ app.patch("/product/{product_id}")
-def update_product(product_id: int, new_updated_product: dict):
-  for product in PRODUCTS:
+  for index, product in enumerate(PRODUCTS):
     if product["id"] == product_id:
-      product.update(new_updated_product)
-      return {"status":"partially updated","new_updated_product":product}
-    
+      PRODUCTS[index] = new_updated_product
+      return {"status": "Updated", "product_id": product_id, "new updated product": new_updated_product}
+
+
+# PATCH Request
+## Update Partial Data
+@app.patch("/product/{product_id}")
+def partial_product(product_id: int, new_updated_product: dict):
+    for product in PRODUCTS:
+        if product["id"] == product_id:
+            product.update(new_updated_product)
+            return {"status": "Partial updated", "product_id": product_id, "new updated product": product}
 
 # DELETE Request
-## Delete data
+## Delete Data
 @app.delete("/product/{product_id}")
 def delete_product(product_id: int):
-    for index,product in enumerate(PRODUCTS):
+    for index, product in enumerate(PRODUCTS):
         if product["id"] == product_id:
-            del PRODUCTS[index]
-            return {"status":"deleted","deleted_product":product}
-              
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            PRODUCTS.pop(index)
+            return {"status": "Deleted", "product_id": product_id}
